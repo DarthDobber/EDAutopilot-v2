@@ -409,19 +409,24 @@ class robigo(ScriptBase):
                             # Select Sirius Atmospherics (This time it should be the nearest POI)
                             session.sendKey('UI_Right')
                             session.sleep(1)
-                            session.sendKey('UI_Down',hold=4) # small trick:hold the button to get to the bottom
+                            #Changing the order from going to the bottom and iterating upwards to 
+                            #going to the top and iterating down. I haven't noticed any issues with this iteration
+                            #changed key from 'UI_Down' to 'UI_Up'
+                            session.sendKey('UI_Up',hold=4) # small trick:hold the button to get to the bottom
                             # update: the image size acts weirdly in the bottoms, so backward iterate
                             session.sleep(1)
-                            for i in range(30): 
-                                
+                            #Changing range from 30 to 40 due to the large number of Conflict Zones
+                            for i in range(40):                                
                                 res1 = isImageInGame(tab_sirius,confidence=0.7)
                                 res2 = isImageInGame(tab_siriusHL,confidence=0.6)
                                 res3 = isImageInGame(tab_siriusMarked,confidence=0.6)
                                 if res2 or res3 : # Match Found
                                     break
                                 if (not res2 and not res3) or res1:
-                                    session.sendKey('UI_Up')
-                                    session.sleep(2.5)
+                                    #Changed from 'UI_Up' to 'UI_Down'
+                                    session.sendKey('UI_Down')
+                                    #Changed sleep time from 2.5 to 1
+                                    session.sleep(1)
                             session.sendKey('UI_Select')
                             session.sleep(1)
                             session.sendKey('UI_Right')
@@ -555,7 +560,8 @@ class robigo(ScriptBase):
                             # Select Robigo Mines (This time it should be the second POI/Station while the first is NAV BEACON)
                             session.sendKey('UI_Right')
                             session.sleep(1)
-                            session.sendKey('UI_Down',hold=4) # small trick:hold the button to get to the bottom
+                            #Changing from 'UI_Down' to 'UI_Up'
+                            session.sendKey('UI_Up',hold=4) # small trick:hold the button to get to the bottom
                             # update: the image size acts weirdly in the bottoms, so backward iterate
                             for i in range(30):
                                 # 因为使得POI最近的距离实在不好控制 所以遍历导航页的项目 选取 Robigo Mines
@@ -569,8 +575,10 @@ class robigo(ScriptBase):
                                 if res2 or res4 or res7: # Match Found
                                     break
                                 if (not res2 and not res4 and not res7) or (res1 or res3 or res5 or res6): 
+                                    #Changing from 'UI_Up' to 'UI_Down'
                                     session.sendKey('UI_Up')
-                                    session.sleep(2.5)
+                                    #Changing from 2.5 to 1
+                                    session.sleep(1)
                             session.sendKey('UI_Select')
                             session.sleep(1)
                             session.sendKey('UI_Right')
