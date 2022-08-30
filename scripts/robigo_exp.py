@@ -77,6 +77,15 @@ offset_button_reward_back = (649,872) # back button in rewarding screen/mission 
 # offset_button_pick_cabin = (893,872)
 offset_pick_cabin_bottom = (1044,796)
 
+#Screenshot Offsets
+offset_credit_reward = (561,589, 119, 27)
+
+#Counter Variables
+CreditsEarned = 0
+numTrips = 0
+startTime = datetime.datetime.now()
+currentCredits = 0
+
 def setDest(session,dest):
     if session.guiFocus != 'GalaxyMap': 
         session.sendKey('UI_OpenGalaxyMap') # Toggle Map
@@ -200,10 +209,12 @@ class robigo_exp(ScriptBase):
                     if failsafeState != '':machine.set_state(failsafeState)
                     if session.status == 'Docked' and progress.state == 'initial': # in while loop
                         if missionCount < maxMissionCount : # 'get-mission'
+                            tripStartTime = datetime.now()
                             machine.set_state('get-mission')
                             # pass
                             # if isDebug: machine.set_state('mission-received') # allow launch without missions (Debug)
                         else :
+                            tripStartTime = datetime.now()
                             machine.set_state('mission-received')
                     
                     elif progress.state == 'get-mission':
@@ -716,6 +727,9 @@ class robigo_exp(ScriptBase):
                                     result1 = locateImageInGame(button_complete_missionHL,confidence=0.6)
                                     if result1[0]==-1 : continue
                                     mouseClick(result1)
+                                    reward_amount = parseCredits(readText(getRegionScreenshot(getScreenShotRegion(windowCoord, offset_credit_reward))))
+                                    CreditsEarned = CreditsEarned + reward_amount
+                                    currentCredits = currentCredits + reward_amount
                                     session.sleep(2)
                                     pyautogui.moveTo(getAbsoluteCoordByOffset(windowCoord,offset_button_reward_1))
                                     session.sendKey('UI_Select')
@@ -734,6 +748,20 @@ class robigo_exp(ScriptBase):
                                 # auto=False
                                 # failsafeState = ''
                                 missionCountOverride = 0
+                                numTrips = numTrips + 1
+                                elapsedTime = datetime.datetime.now().timestamp() - startTime.timestamp()
+                                tripElapsedTime = datetime.datetime.now().timestamp() - tripStartTime.timestamp()
+                                elapsedHours = elapsedTime/3600
+                                logger.info("Total Credits Earned: " + prettyNumber(CreditsEarned))
+                                logger.info("Total Trips: " + str(numTrips))
+                                logger.info("--------------------------")
+                                logger.info("Current Trip Credits: "  + prettyNumber(currentCredits))
+                                logger.info("Current Trip Time: " + str(datetime.timedelta(seconds=round(tripElapsedTime))))
+                                logger.info("--------------------------")
+                                logger.info("Credits per Hour: " +  prettyNumber(round(CreditsEarned/elapsedHours)))
+                                logger.info("Credits per Trip Average: " + prettyNumber(CreditsEarned/numTrips))
+                                logger.info("Average Trip Time: " + str(datetime.timedelta(seconds=round(elapsedTime/numTrips))))
+                                currentCredits = 0
                                 machine.set_state('initial')
 
                 if align: align = session.align()
