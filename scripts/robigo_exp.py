@@ -2,6 +2,7 @@ from scripts.ScriptBase import *
 from utils.utils import *
 from PySide2.QtWidgets import QVBoxLayout, QLabel, QGroupBox, QComboBox
 from datetime import datetime
+import datetime
 import transitions
 pyautogui.FAILSAFE=False
 # "Template name" : {"grayscale","scalable","path"}
@@ -167,8 +168,8 @@ class robigo_exp(ScriptBase):
 
     def run(self):
         isDebug = True
-        startTime = datetime.now()
-        elapsedTime = datetime.now()-startTime
+        startTime = datetime.datetime.now()
+        elapsedTime = datetime.datetime.now()-startTime
         align = False
         auto = False
         progress = self.progress
@@ -187,11 +188,11 @@ class robigo_exp(ScriptBase):
                     align = True
                 if keyboard.is_pressed('home'): 
                     auto = True
-                    startTime = datetime.now()
+                    startTime = datetime.datetime.now()
                 if keyboard.is_pressed('end'):
                     auto = False
                 if isDebug : # Debugging functions
-                    if keyboard.is_pressed('f11'): session.screenCapture(f"{datetime.now().strftime('%H-%M-%S')}.png",grayscale=True)
+                    if keyboard.is_pressed('f11'): session.screenCapture(f"{datetime.datetime.now().strftime('%H-%M-%S')}.png",grayscale=True)
                     if keyboard.is_pressed("f9"):
                         pass
                 if missionCountOverride != 0: missionCount = missionCountOverride
@@ -200,7 +201,7 @@ class robigo_exp(ScriptBase):
                 # Functions
                 if auto:
                     if progress.state!='initial':
-                        elapsedTime = datetime.now()-startTime
+                        elapsedTime = datetime.datetime.now()-startTime
                         self.comboBox1.setCurrentText(progress.state)
                     if keyboard.is_pressed('f10'): # Emergency Break
                         auto=False
@@ -209,12 +210,12 @@ class robigo_exp(ScriptBase):
                     if failsafeState != '':machine.set_state(failsafeState)
                     if session.status == 'Docked' and progress.state == 'initial': # in while loop
                         if missionCount < maxMissionCount : # 'get-mission'
-                            tripStartTime = datetime.now()
+                            tripStartTime = datetime.datetime.now()
                             machine.set_state('get-mission')
                             # pass
                             # if isDebug: machine.set_state('mission-received') # allow launch without missions (Debug)
                         else :
-                            tripStartTime = datetime.now()
+                            tripStartTime = datetime.datetime.now()
                             machine.set_state('mission-received')
                     
                     elif progress.state == 'get-mission':
