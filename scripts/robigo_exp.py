@@ -97,7 +97,7 @@ def setDest(session,dest):
 
 class p(object):
     pass
-class robigo(ScriptBase):
+class robigo_exp(ScriptBase):
     description = """
     robigo.py: An automonous script for Robigo Sightseeing Mission
     You must start the cycle in Passenger Lounge 
@@ -576,7 +576,7 @@ class robigo(ScriptBase):
                                     break
                                 if (not res2 and not res4 and not res7) or (res1 or res3 or res5 or res6): 
                                     #Changing from 'UI_Up' to 'UI_Down'
-                                    session.sendKey('UI_Up')
+                                    session.sendKey('UI_Down')
                                     #Changing from 2.5 to 1
                                     session.sleep(1)
                             session.sendKey('UI_Select')
