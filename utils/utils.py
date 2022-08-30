@@ -14,6 +14,8 @@ import traceback
 from utils.journal import *
 from utils.keybinds import *
 from utils.status import *
+import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 ## Constants
 ALIGN_TRIMM_DELAY = 0.10
@@ -254,3 +256,39 @@ def stackAnalyser(stack:str):
 
 def getKeys(d:dict, value):
     return [k for k,v in d.items() if v == value]
+
+#Returns a (Left, Top, W, H) coordinate based off the game Window coordinates and the offset.
+def getScreenShotRegion(gameCoord, offset):
+    return gameCoord[0]+offset[0],gameCoord[1]+offset[1], offset[2], offset[3]
+
+#Takes a screenshot in the game window of the specified region.
+def getRegionScreenshot(region):
+    return pyautogui.screenshot(region=region)
+
+#Returns the text within the supplied image
+def readText(img):
+    img_np = np.array(img)
+    return pytesseract.image_to_string(img_np)
+
+#Returns only the integer version of credits read from image.
+def parseCredits(input):
+    text = input.replace(',','')
+    text = text.replace(' CR', '')
+    text = text.strip()
+    return int(text)
+
+#Returns a screenshot of the game window.  Can be used to determine what went wrong
+#While script runs unattended.
+def debugScreenshot(gameCoord, state, position):
+    screen_dir = '/debug_screenshots/'
+    os.path.join(os.path.dirname(os.cwd()), screen_dir)
+    windowSize = (1600, 900)
+    region = gameCoord + windowSize
+    screenshot = pyautogui.screenshot(region=region)
+    timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
+    filename = timestr + state + position
+    screenshot.save(path + filename + '.png', 'png')
+
+#Returns number with commas
+def prettyNumber(input):
+    return "{:,}".format(int(input))
