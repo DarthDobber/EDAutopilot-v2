@@ -86,6 +86,7 @@ CreditsEarned = 0
 numTrips = 0
 startTime = datetime.datetime.now()
 currentCredits = 0
+tripStartTime = datetime.datetime.now()
 
 def setDest(session,dest):
     if session.guiFocus != 'GalaxyMap': 
@@ -708,6 +709,9 @@ class robigo_exp(ScriptBase):
 
                     elif progress.state=='claim-task-reward': # Auto claim task rewards
                         windowCoord = session.windowCoord
+                        global CreditsEarned
+                        global numTrips
+                        global currentCredits
                         session.sleep(10) # depends on internet connection
                         if session.guiFocus != 'StationServices' or not isImageInGame(sign_passenger_lounge,confidence=0.6): machine.set_state('goto-passenger')
                         else:
