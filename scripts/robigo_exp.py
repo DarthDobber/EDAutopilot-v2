@@ -230,7 +230,7 @@ class robigo_exp(ScriptBase):
                                     mouseClick(getAbsoluteCoordByOffset(windowCoord,offset_button_provider_2))
                                 if i == 2 : # check third
                                     mouseClick(getAbsoluteCoordByOffset(windowCoord,offset_button_provider_3))
-                                session.sleep(5)
+                                session.sleep(2.5)
                                 for j in range(6): # failsafe number 6
                                     session.sleep(1)
                                     result = locateImageInGame(mission_dest,confidence=0.7)
@@ -242,7 +242,7 @@ class robigo_exp(ScriptBase):
                                     result1 = locateImageInGame(mission_destHL,confidence=0.7)
                                     if result1[0]==-1 : continue
                                     mouseClick(result1)
-                                    session.sleep(2) # entering mission detail board
+                                    session.sleep(1) # entering mission detail board
                                     lowValue = isImageInGame(mission_low_value_target,confidence=0.6)
                                     highValue = isImageInGame(mission_high_value_target,confidence=0.6)
                                     if lowValue and not highValue : # low value target
@@ -252,7 +252,6 @@ class robigo_exp(ScriptBase):
                                         session.sendKey('UI_Right')
                                         session.sleep(1)
                                         session.sendKey('UI_Select')
-                                        session.sleep(1)
                                         session.sleep(1)
                                         pyautogui.moveTo(getAbsoluteCoordByOffset(windowCoord,offset_pick_cabin_bottom))
                                         session.sleep(1)
@@ -269,12 +268,10 @@ class robigo_exp(ScriptBase):
                                                 if t == 0: # first enumerate
                                                     session.sendKey('UI_Select')
                                                     session.sleep(1)
-                                                    session.sleep(1)
                                                 else:
                                                     session.sendKey('UI_Up')
                                                     session.sleep(1)
                                                     session.sendKey('UI_Select')
-                                                    session.sleep(1)
                                                     session.sleep(1)
                                             else:
                                                 break
@@ -712,7 +709,7 @@ class robigo_exp(ScriptBase):
                         global CreditsEarned
                         global numTrips
                         global currentCredits
-                        session.sleep(10) # depends on internet connection
+                        session.sleep(5) # depends on internet connection
                         if session.guiFocus != 'StationServices' or not isImageInGame(sign_passenger_lounge,confidence=0.6): machine.set_state('goto-passenger')
                         else:
                             for i in range(3): # 3 mission providers
@@ -722,7 +719,7 @@ class robigo_exp(ScriptBase):
                                     mouseClick(getAbsoluteCoordByOffset(windowCoord,offset_button_provider_2))
                                 if i == 2 : # check third
                                     mouseClick(getAbsoluteCoordByOffset(windowCoord,offset_button_provider_3))
-                                session.sleep(5)
+                                session.sleep(2)
                                 for j in range(10): # failsafe number 10 (in fact the max mission number is 7)
                                     session.sleep(1)
                                     result = locateImageInGame(button_complete_mission,confidence=0.6)
@@ -735,10 +732,10 @@ class robigo_exp(ScriptBase):
                                     reward_amount = parseCredits(readText(getRegionScreenshot(getScreenShotRegion(windowCoord, offset_credit_reward))))
                                     CreditsEarned = CreditsEarned + reward_amount
                                     currentCredits = currentCredits + reward_amount
-                                    session.sleep(2)
+                                    session.sleep(1)
                                     pyautogui.moveTo(getAbsoluteCoordByOffset(windowCoord,offset_button_reward_1))
                                     session.sendKey('UI_Select')
-                                    session.sleep(3)
+                                    session.sleep(1.5)
                                     backButton = isImageInGame(button_back_smallHL,confidence=0.6)
                                     while not backButton:  backButton = isImageInGame(button_back_smallHL,confidence=0.6)
                                     session.sleep(1)
