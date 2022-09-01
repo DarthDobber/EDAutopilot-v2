@@ -182,6 +182,7 @@ class robigo_exp(ScriptBase):
         maxMissionCount = self.maxMissionCount
         missionCountOverride = self.missionCountOverride
         failsafeState = ''
+        global tripStartTime
         while True:
             try:
                 # Inputs
@@ -324,6 +325,7 @@ class robigo_exp(ScriptBase):
                     elif progress.state=='thrust-up':
                         session.sendKey('ThrustUp')
                         if 'FSDMassLocked' not in session.stateList:
+                            session.sendKey('EngineBoost')
                             session.sendKey('ThrustUp',hold=3)
                             session.sendKey('SpeedZero')
                             session.sleep(1)
